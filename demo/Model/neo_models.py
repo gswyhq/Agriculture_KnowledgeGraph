@@ -1,12 +1,19 @@
 from py2neo import Graph, Node, Relationship, cypher, Path
-import neo4j
+import os
+# import neo4j
+
+NEO4J_HOST = os.environ.get('NEO4J_HOST', 'localhost')
+NEO4J_HTTP_PORT = os.environ.get('NEO4J_HTTP_PORT', 7474)
+NEO4J_BOLT_PORT = os.environ.get('NEO4J_BOLT_PORT', 7687)
+
 class Neo4j():
 	graph = None
 	def __init__(self):
 		print("create neo4j class ...")
 
 	def connectDB(self):
-		self.graph = Graph("http://localhost:7474", username="neo4j", password="123456")
+		url = "http://{}:{}".format(NEO4J_HOST, NEO4J_HTTP_PORT)
+		self.graph = Graph(url, username="neo4j", password="123456")
 
 	def matchItembyTitle(self,value):
 		sql = "MATCH (n:Item { title: '" + str(value) + "' }) return n;"
